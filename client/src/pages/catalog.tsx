@@ -1,20 +1,20 @@
-import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowLeft, Search, Filter } from "lucide-react";
 import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 
-// Existing images (will be updated with new imports in the actual file implementation)
+// Images
 import maizeImg from "@assets/stock_images/white_maize_corn_gra_b609867d.jpg";
 import sorghumImg from "@assets/stock_images/red_sorghum_grains_p_cd26aa06.jpg";
 import milletImg from "@assets/stock_images/pearl_millet_grains__de458967.jpg";
 import riceImg from "@assets/stock_images/raw_white_rice_grain_f8c8b950.jpg";
 import beansImg from "@assets/stock_images/nigerian_brown_beans_9a5c8231.jpg";
 import soyaImg from "@assets/stock_images/soya_beans_pile_agri_247d9184.jpg";
-
-// New images (placeholders until downloaded)
 import fonioImg from "@assets/stock_images/fonio_grains_acha_pi_5bf222d4.jpg";
 import bambaraImg from "@assets/stock_images/bambara_groundnut_nu_52a5afca.jpg";
 import groundnutImg from "@assets/stock_images/shelled_groundnuts_p_b7953ac2.jpg";
@@ -122,64 +122,134 @@ const allGrains = [
 ];
 
 export default function Catalog() {
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
   return (
     <div className="min-h-screen bg-background font-sans text-foreground selection:bg-secondary/30">
       <Navbar />
       
-      <main className="pt-24 pb-20">
-        <div className="container px-4 md:px-6">
+      {/* Modern Catalog Header */}
+      <section className="relative pt-32 pb-20 px-4 md:px-6 bg-primary overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+           {/* Abstract pattern */}
+           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+             <path d="M0 0 L100 0 L100 80 Q50 100 0 80 Z" fill="white" />
+           </svg>
+        </div>
+        
+        <div className="container relative z-10 flex flex-col items-center text-center">
+          <Link href="/">
+            <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10 mb-8 rounded-full">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+            </Button>
+          </Link>
           
-          {/* Header */}
-          <div className="mb-12">
-            <Link href="/">
-              <a className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 transition-colors">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
-              </a>
-            </Link>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">
-              Full Grain Catalog
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              Explore our extensive range of premium Nigerian agricultural products. From staple grains to export-grade nuts and seeds.
-            </p>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-6"
+          >
+            Our Product <span className="text-secondary">Catalog</span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-lg md:text-xl text-white/80 max-w-2xl mb-12"
+          >
+            Explore our extensive range of premium Nigerian agricultural products. From staple grains to export-grade nuts and seeds.
+          </motion.p>
+
+          {/* Search/Filter Bar */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="w-full max-w-xl bg-white p-2 rounded-full shadow-2xl flex items-center gap-2 pl-6"
+          >
+            <Search className="text-muted-foreground h-5 w-5" />
+            <Input 
+              placeholder="Search grains, nuts, seeds..." 
+              className="border-none shadow-none focus-visible:ring-0 text-base h-12 bg-transparent" 
+            />
+            <Button className="rounded-full px-6 h-12 bg-primary hover:bg-primary/90">
+              Search
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
+      <main className="py-20 -mt-10 relative z-20">
+        <div className="container px-4 md:px-6">
+          {/* Categories / Filters - Horizontal Scroll on Mobile */}
+          <div className="flex gap-4 overflow-x-auto pb-8 mb-4 no-scrollbar justify-start md:justify-center">
+             {["All Products", "Cereals", "Legumes", "Nuts & Oilseeds", "Superfoods"].map((cat, i) => (
+               <Button 
+                key={cat} 
+                variant={i === 0 ? "default" : "outline"} 
+                className={`rounded-full px-6 ${i === 0 ? 'bg-primary text-white' : 'bg-white border-border hover:bg-muted'}`}
+               >
+                 {cat}
+               </Button>
+             ))}
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
             {allGrains.map((item, index) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
               >
-                <Card className="h-full border-none shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden rounded-3xl bg-white flex flex-col">
-                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden rounded-[2rem] bg-white flex flex-col group cursor-pointer ring-1 ring-black/5">
+                  <div className="relative aspect-square overflow-hidden bg-muted">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-white/90 text-primary hover:bg-white backdrop-blur-sm border-none shadow-sm">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                    
+                    <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+                      <Badge className="bg-white/90 text-primary hover:bg-white backdrop-blur-sm border-none shadow-sm font-bold px-3 py-1">
                         {item.category}
                       </Badge>
                     </div>
+
+                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                       {/* Content that slides up on hover if needed, or static */}
+                    </div>
                   </div>
-                  <CardContent className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-2xl font-serif font-bold text-foreground mb-3">
+                  
+                  <CardContent className="p-6 flex flex-col flex-grow relative">
+                    <h3 className="text-2xl font-serif font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                       {item.name}
                     </h3>
+                    <div className="w-12 h-1 bg-secondary rounded-full mb-4 group-hover:w-20 transition-all duration-300" />
+                    
                     <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
                       {item.description}
                     </p>
-                    <div className="pt-4 border-t border-border mt-auto">
-                      <p className="text-xs font-bold text-secondary uppercase tracking-wider">
-                        Specifications
-                      </p>
-                      <p className="text-sm font-medium text-foreground mt-1">
-                        {item.specs}
-                      </p>
+                    
+                    <div className="bg-muted/30 -mx-6 -mb-6 p-4 px-6 border-t border-border/50 group-hover:bg-primary/5 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                            Specifications
+                          </p>
+                          <p className="text-sm font-bold text-foreground mt-0.5">
+                            {item.specs}
+                          </p>
+                        </div>
+                        <Button size="icon" variant="ghost" className="rounded-full hover:bg-secondary hover:text-primary transition-colors">
+                           <ArrowLeft className="rotate-180 h-5 w-5" />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

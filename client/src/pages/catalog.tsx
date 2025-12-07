@@ -1,4 +1,5 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Search, Filter } from "lucide-react";
 import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 
-// Images
+// Existing Images
 import maizeImg from "@assets/stock_images/white_maize_corn_gra_b609867d.jpg";
 import sorghumImg from "@assets/stock_images/red_sorghum_grains_p_cd26aa06.jpg";
 import milletImg from "@assets/stock_images/pearl_millet_grains__de458967.jpg";
@@ -22,13 +23,33 @@ import sesameImg from "@assets/stock_images/sesame_seeds_pile_be_e8f41e48.jpg";
 import cashewImg from "@assets/stock_images/raw_cashew_nuts_in_s_e9e84fcd.jpg";
 import hibiscusImg from "@assets/stock_images/dried_hibiscus_flowe_80238da8.jpg";
 
+// New Images (Updated with downloaded files)
+import wheatImg from "@assets/stock_images/wheat_grains_pile_ni_5e7d14a2.jpg";
+import sunflowerImg from "@assets/stock_images/raw_sunflower_seeds__22b2ead3.jpg";
+import cottonseedImg from "@assets/stock_images/cottonseed_cake_anim_1ceb87fb.jpg";
+import maizeBranImg from "@assets/stock_images/maize_bran_animal_fe_f46f9021.jpg";
+import wheatBranImg from "@assets/stock_images/wheat_bran_animal_fe_8848cc43.jpg";
+import soybeanMealImg from "@assets/stock_images/soybean_meal_soya_ca_a26a8ff6.jpg";
+import groundnutCakeImg from "@assets/stock_images/groundnut_cake_kuli__4fadcc5e.jpg";
+import ofadaImg from "@assets/stock_images/ofada_rice_raw_grain_67d5cbdd.jpg";
+import tigernutImg from "@assets/stock_images/dried_tiger_nuts_pil_2a659973.jpg";
+
+const categories = [
+  "Cereal Grains",
+  "Legumes & Pulses",
+  "Oil & Feed Grains",
+  "Feed & Industrial",
+  "Specialty Grains"
+];
+
 const allGrains = [
+  // 🌾 Cereal Grains
   {
     id: 1,
     name: "Maize (Corn)",
-    description: "Premium quality yellow and white maize, perfect for food processing, flour production, and animal feed. Sourced from the fertile belts of Kaduna and Niger states.",
+    description: "High-yield yellow and white maize. Used for food processing, animal feed, flour, and industrial starch production.",
     image: maizeImg,
-    category: "Cereal",
+    category: "Cereal Grains",
     specs: "Moisture: <12% | Purity: 99%"
   },
   {
@@ -36,94 +57,175 @@ const allGrains = [
     name: "Sorghum (Guinea Corn)",
     description: "Nutrient-rich red and white sorghum varieties. Essential for beverages, brewing, and traditional meals like Tuwo.",
     image: sorghumImg,
-    category: "Cereal",
+    category: "Cereal Grains",
     specs: "Moisture: <11% | Cleaned"
   },
   {
     id: 3,
-    name: "Pearl Millet",
-    description: "High-energy millet grains, drought-resistant and rich in minerals. A staple for Fura da Nono and pap production.",
+    name: "Millet (Pearl Millet)",
+    description: "Drought-resistant grain with excellent energy content. Ideal for pap, couscous, livestock feed, and fortified foods.",
     image: milletImg,
-    category: "Cereal",
+    category: "Cereal Grains",
     specs: "Type: Pearl | Stone-free"
   },
   {
     id: 4,
-    name: "Premium Rice",
-    description: "Long-grain polished and parboiled rice options. Locally grown with international processing standards for a stone-free experience.",
+    name: "Rice (White & Parboiled)",
+    description: "Clean, well-milled grains with consistent quality. Perfect for retail packaging, bulk supply, and everyday consumption.",
     image: riceImg,
-    category: "Cereal",
+    category: "Cereal Grains",
     specs: "Polished | Parboiled"
   },
   {
     id: 5,
-    name: "Brown Beans",
-    description: "Protein-rich Nigerian brown beans (Honey Beans/Oloyin). Sweet, fast-cooking, and weevil-free storage guaranteed.",
-    image: beansImg,
-    category: "Legume",
-    specs: "Type: Oloyin/Drum | Cleaned"
+    name: "Wheat",
+    description: "High-quality wheat grains suitable for flour mills, bakeries, and large-scale food processing industries.",
+    image: wheatImg,
+    category: "Cereal Grains",
+    specs: "Hard Red/White | Dried"
   },
   {
     id: 6,
-    name: "Soya Beans",
-    description: "High-protein soya beans ideal for industrial oil extraction, soy milk production, and livestock feed formulation.",
-    image: soyaImg,
-    category: "Legume",
-    specs: "Oil Content: High | Dried"
+    name: "Acha (Fonio)",
+    description: "Light, gluten-free ancient grain. Popular for health foods, porridges, and premium nutrition products.",
+    image: fonioImg,
+    category: "Cereal Grains",
+    specs: "Sand-free | Whole Grain"
   },
+
+  // 🫘 Legumes & Pulses
   {
     id: 7,
-    name: "Fonio (Acha)",
-    description: "The ancient supergrain. Gluten-free, diabetic-friendly, and packed with amino acids. Sourced from the Plateau highlands.",
-    image: fonioImg,
-    category: "Superfood",
-    specs: "Sand-free | Whole Grain"
+    name: "Beans (Brown & Honey)",
+    description: "Protein-rich Nigerian beans. Perfect for akara, moi-moi, home cooking, and bulk food processing.",
+    image: beansImg,
+    category: "Legumes & Pulses",
+    specs: "Type: Oloyin/Drum | Cleaned"
   },
   {
     id: 8,
-    name: "Bambara Nut",
-    description: "A complete food hard-nut legume. Rich in protein and tough enough to grow in harsh conditions. Great for Okpa flour.",
-    image: bambaraImg,
-    category: "Legume",
-    specs: "Dried | Shelled"
+    name: "Soya Beans",
+    description: "Versatile high-protein legume. Used for animal feed, oil extraction, milk production, and industrial processing.",
+    image: soyaImg,
+    category: "Legumes & Pulses",
+    specs: "Oil Content: High | Dried"
   },
   {
     id: 9,
     name: "Groundnuts (Peanuts)",
-    description: "Premium shelled groundnuts for oil production, peanut butter, and snacks. High oil content and aflatoxin-free.",
+    description: "Fresh, oil-dense nuts ideal for roasting, oil milling, confectionery, and export markets.",
     image: groundnutImg,
-    category: "Nut/Oilseed",
+    category: "Legumes & Pulses",
     specs: "Shelled | Red/Kampala"
   },
   {
     id: 10,
-    name: "Sesame Seeds (Beniseed)",
-    description: "High-grade white sesame seeds. A major export crop used for oil and bakery products globally.",
-    image: sesameImg,
-    category: "Oilseed",
-    specs: "Purity: 99.5% | White"
+    name: "Cowpeas",
+    description: "Staple West African pulse. Excellent for home meals, packaging, and commercial food production.",
+    image: beansImg, // Reusing beans img as fallback or specific cowpea img if distinct
+    category: "Legumes & Pulses",
+    specs: "Dried | Cleaned"
   },
   {
     id: 11,
-    name: "Raw Cashew Nuts",
-    description: "High-quality raw cashew nuts in shell. Excellent kernel output ratio (KOR), perfect for processing and export.",
-    image: cashewImg,
-    category: "Nut",
-    specs: "KOR: 48-52lbs | Dried"
+    name: "Bambara Nuts",
+    description: "Nutrient-rich traditional legume. Used in flours, snacks, and specialty health-food applications.",
+    image: bambaraImg,
+    category: "Legumes & Pulses",
+    specs: "Dried | Shelled"
   },
+
+  // 🌱 Oil & Feed Grains
   {
     id: 12,
-    name: "Hibiscus (Zobo)",
-    description: "Dried hibiscus flowers for beverages and medicinal teas. Deep red color and strong flavor profile.",
-    image: hibiscusImg,
-    category: "Flower",
-    specs: "Dried | Whole Flower"
+    name: "Sesame Seeds",
+    description: "Premium hulled and unhulled sesame. Essential for oil pressing, export, tahini, and bakery use.",
+    image: sesameImg,
+    category: "Oil & Feed Grains",
+    specs: "Purity: 99.5% | White"
+  },
+  {
+    id: 13,
+    name: "Sunflower Seeds",
+    description: "Oil-rich seeds perfect for feed production, oil extraction, and food-grade processing.",
+    image: sunflowerImg,
+    category: "Oil & Feed Grains",
+    specs: "High Oil Content | Dried"
+  },
+  {
+    id: 14,
+    name: "Cottonseed Cake",
+    description: "Protein-rich by-product used in poultry and livestock feed formulations.",
+    image: cottonseedImg,
+    category: "Oil & Feed Grains",
+    specs: "Protein: High | Feed Grade"
+  },
+
+  // 🐄 Feed & Industrial
+  {
+    id: 15,
+    name: "Maize Bran",
+    description: "Affordable, energy-dense feed ingredient for poultry, cattle, and fish farming.",
+    image: maizeBranImg,
+    category: "Feed & Industrial",
+    specs: "Dry Matter | Fiber Rich"
+  },
+  {
+    id: 16,
+    name: "Wheat Bran",
+    description: "Fiber-rich supplement widely used in livestock rations and feed mills.",
+    image: wheatBranImg,
+    category: "Feed & Industrial",
+    specs: "Flaked | Dried"
+  },
+  {
+    id: 17,
+    name: "Soybean Meal / Cake",
+    description: "High-protein feed concentrate essential for poultry, aquaculture, and livestock growth.",
+    image: soybeanMealImg,
+    category: "Feed & Industrial",
+    specs: "Protein: 44-48% | Defatted"
+  },
+  {
+    id: 18,
+    name: "Groundnut Cake",
+    description: "Nutritious feed ingredient used in animal fattening and commercial feed production.",
+    image: groundnutCakeImg,
+    category: "Feed & Industrial",
+    specs: "Oil Residual: Low | Pressed"
+  },
+
+  // 🌾 Specialty Nigerian Grains
+  {
+    id: 19,
+    name: "Ofada Rice",
+    description: "Local aromatic rice variety. Known for its unique flavor, premium value, and cultural significance.",
+    image: ofadaImg,
+    category: "Specialty Grains",
+    specs: "Aromatic | Short Grain"
+  },
+  {
+    id: 20,
+    name: "Tigernuts",
+    description: "Naturally sweet, fiber-rich tubers. Popular for drinks, flours, snacks, and health-food products.",
+    image: tigernutImg,
+    category: "Specialty Grains",
+    specs: "Dried | Sweet/Yellow"
   }
 ];
 
 export default function Catalog() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const [activeCategory, setActiveCategory] = useState("All Products");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredGrains = useMemo(() => {
+    return allGrains.filter((item) => {
+      const matchesCategory = activeCategory === "All Products" || item.category === activeCategory;
+      const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            item.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeCategory, searchQuery]);
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground selection:bg-secondary/30">
@@ -159,10 +261,10 @@ export default function Catalog() {
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-white/80 max-w-2xl mb-12"
           >
-            Explore our extensive range of premium Nigerian agricultural products. From staple grains to export-grade nuts and seeds.
+            Explore our extensive range of premium Nigerian agricultural products. Organized for your convenience.
           </motion.p>
 
-          {/* Search/Filter Bar */}
+          {/* Search Bar */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,11 +274,10 @@ export default function Catalog() {
             <Search className="text-muted-foreground h-5 w-5" />
             <Input 
               placeholder="Search grains, nuts, seeds..." 
-              className="border-none shadow-none focus-visible:ring-0 text-base h-12 bg-transparent" 
+              className="border-none shadow-none focus-visible:ring-0 text-base h-12 bg-transparent"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Button className="rounded-full px-6 h-12 bg-primary hover:bg-primary/90">
-              Search
-            </Button>
           </motion.div>
         </div>
       </section>
@@ -184,12 +285,20 @@ export default function Catalog() {
       <main className="py-20 -mt-10 relative z-20">
         <div className="container px-4 md:px-6">
           {/* Categories / Filters - Horizontal Scroll on Mobile */}
-          <div className="flex gap-4 overflow-x-auto pb-8 mb-4 no-scrollbar justify-start md:justify-center">
-             {["All Products", "Cereals", "Legumes", "Nuts & Oilseeds", "Superfoods"].map((cat, i) => (
+          <div className="flex gap-3 overflow-x-auto pb-8 mb-4 no-scrollbar justify-start lg:justify-center px-1 snap-x snap-mandatory">
+            <Button 
+                onClick={() => setActiveCategory("All Products")}
+                variant={activeCategory === "All Products" ? "default" : "outline"} 
+                className={`rounded-full px-6 h-12 flex-shrink-0 snap-center ${activeCategory === "All Products" ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border-border hover:bg-muted'}`}
+            >
+              All Products
+            </Button>
+             {categories.map((cat) => (
                <Button 
                 key={cat} 
-                variant={i === 0 ? "default" : "outline"} 
-                className={`rounded-full px-6 ${i === 0 ? 'bg-primary text-white' : 'bg-white border-border hover:bg-muted'}`}
+                onClick={() => setActiveCategory(cat)}
+                variant={activeCategory === cat ? "default" : "outline"} 
+                className={`rounded-full px-6 h-12 flex-shrink-0 snap-center transition-all duration-300 ${activeCategory === cat ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border-border hover:bg-muted'}`}
                >
                  {cat}
                </Button>
@@ -198,64 +307,76 @@ export default function Catalog() {
 
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-            {allGrains.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden rounded-[2rem] bg-white flex flex-col group cursor-pointer ring-1 ring-black/5">
-                  <div className="relative aspect-square overflow-hidden bg-muted">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                    
-                    <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-                      <Badge className="bg-white/90 text-primary hover:bg-white backdrop-blur-sm border-none shadow-sm font-bold px-3 py-1">
-                        {item.category}
-                      </Badge>
-                    </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                       {/* Content that slides up on hover if needed, or static */}
-                    </div>
-                  </div>
-                  
-                  <CardContent className="p-6 flex flex-col flex-grow relative">
-                    <h3 className="text-2xl font-serif font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      {item.name}
-                    </h3>
-                    <div className="w-12 h-1 bg-secondary rounded-full mb-4 group-hover:w-20 transition-all duration-300" />
-                    
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
-                      {item.description}
-                    </p>
-                    
-                    <div className="bg-muted/30 -mx-6 -mb-6 p-4 px-6 border-t border-border/50 group-hover:bg-primary/5 transition-colors">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                            Specifications
-                          </p>
-                          <p className="text-sm font-bold text-foreground mt-0.5">
-                            {item.specs}
-                          </p>
-                        </div>
-                        <Button size="icon" variant="ghost" className="rounded-full hover:bg-secondary hover:text-primary transition-colors">
-                           <ArrowLeft className="rotate-180 h-5 w-5" />
-                        </Button>
+            <AnimatePresence mode="popLayout">
+              {filteredGrains.map((item) => (
+                <motion.div
+                  layout
+                  key={item.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="h-full border-none shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden rounded-[2rem] bg-white flex flex-col group cursor-pointer ring-1 ring-black/5">
+                    <div className="relative aspect-square overflow-hidden bg-muted">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                      
+                      <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+                        <Badge className="bg-white/90 text-primary hover:bg-white backdrop-blur-sm border-none shadow-sm font-bold px-3 py-1">
+                          {item.category.split(' ')[0]}
+                        </Badge>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                    
+                    <CardContent className="p-6 flex flex-col flex-grow relative">
+                      <h3 className="text-xl md:text-2xl font-serif font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                        {item.name}
+                      </h3>
+                      <div className="w-12 h-1 bg-secondary rounded-full mb-4 group-hover:w-20 transition-all duration-300" />
+                      
+                      <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
+                        {item.description}
+                      </p>
+                      
+                      <div className="bg-muted/30 -mx-6 -mb-6 p-4 px-6 border-t border-border/50 group-hover:bg-primary/5 transition-colors mt-auto">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                              Specifications
+                            </p>
+                            <p className="text-xs md:text-sm font-bold text-foreground mt-0.5">
+                              {item.specs}
+                            </p>
+                          </div>
+                          <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:bg-secondary group-hover:text-primary transition-colors">
+                             <ArrowLeft className="rotate-180 h-4 w-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
+          
+          {filteredGrains.length === 0 && (
+             <div className="text-center py-20 text-muted-foreground">
+               <p className="text-lg">No products found matching your search.</p>
+               <Button 
+                 variant="link" 
+                 onClick={() => {setSearchQuery(""); setActiveCategory("All Products")}}
+                 className="text-primary mt-2"
+               >
+                 Clear filters
+               </Button>
+             </div>
+          )}
 
         </div>
       </main>

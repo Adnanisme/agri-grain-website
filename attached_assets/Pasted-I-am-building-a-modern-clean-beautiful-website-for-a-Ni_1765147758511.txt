@@ -1,0 +1,163 @@
+I am building a modern, clean, beautiful website for a Nigerian agricultural company called AFZHARS AgriGrains Ltd.
+ I will upload the company logo and several inspiration screenshots.
+ Use the logo colors and the inspiration style to guide the design.
+Here is exactly what I want:
+
+GENERAL LOOK & FEEL
+The website should look very professional, clean, modern, and trustworthy.
+
+
+Use the company’s brand colors from the logo: deep agricultural green, yellow-green, and white.
+
+
+The style should feel premium, natural, and agricultural — similar to the inspiration screenshots I will upload.
+
+
+Everything should be simple, minimal, spacious, and elegant.
+
+
+Sections should have rounded shapes, soft edges, clean typography, and smooth spacing.
+
+
+Alternate between green, beige, and white background sections (like the inspo).
+
+
+Add very soft modern touches such as wavy section dividers, rounded cards, and warm neutral colors.
+
+
+
+IMAGERY STYLE
+Use high-quality, realistic Nigerian agricultural images, not foreign farm images.
+ Examples of images you should use throughout the design:
+Nigerian grain fields
+
+
+Bags of maize, millet, sorghum, beans, rice
+
+
+Nigerian storage warehouses and grain markets
+
+
+Local farmers, grain piles, tractors, feed production
+
+
+Livestock for the animal-fattening section
+
+
+Images must look realistic, high-resolution, and connected to West Africa.
+
+RESPONSIVE DESIGN
+The website must look excellent on mobile phones and laptops.
+
+
+On mobile: simple stacking, big readable text, strong images.
+
+
+On desktop: wide sections, beautiful hero banner, nice layouts.
+
+
+
+WEBSITE SECTIONS TO INCLUDE
+Use clean headers and modern layouts for these:
+1. HOME SECTION
+A strong hero banner with a Nigerian agricultural background image.
+
+
+A white rounded box in front with the main headline:
+ “Premium Grains & Agricultural Solutions From Nigeria.”
+
+
+Short description of what the company does.
+
+
+2. ABOUT US
+Use this text but rewrite it cleanly and professionally:
+AFZHARS AgriGrains Ltd. is a leading Nigerian agricultural company specializing in grain production, importation, exportation, storage, supply management, animal feed production, and animal fattening.
+ Our mission is quality, freshness, reliability, and sustainability.
+3. SERVICES SECTION
+Show each service in clean rounded cards with icons or images:
+Grain Production
+
+
+Grain Importation
+
+
+Grain Exportation
+
+
+Grain Storage
+
+
+Supply Chain Management
+
+
+Animal Feed Production
+
+
+Animal Fattening
+
+
+4. PRODUCTS / GRAIN CATALOG
+Each grain should have a picture + short description:
+Maize
+
+
+Sorghum (Guinea Corn)
+
+
+Millet
+
+
+Beans
+
+
+Soya Beans
+
+
+Rice
+And many more….
+
+
+Use clean grid layout with rounded corners.
+5. TESTIMONIALS
+A simple slider or card layout with customer feedback.
+6. CONTACT US
+Include phone number, email, and addresses (Kano & Borno branches).
+ Add a clean, modern contact form.
+
+OVERALL VIBE
+Friendly but professional
+
+
+Agricultural but modern
+
+
+Nigerian-authentic
+
+
+Beautiful spacing and layout
+
+
+Easy to navigate
+
+
+High-quality visuals
+
+
+Consistent branding
+
+
+Soft green & beige tones
+
+
+Elegant rounded shapes
+
+
+Warm and trustworthy atmosphere
+
+
+
+FINAL NOTE FOR REPLIT
+Please create a full, beautiful, modern website design based on everything above, using the logo and inspiration screenshots I will upload.
+ Make it visually stunning, clean, and premium — something that looks like a real corporate agricultural website in 2025.
+

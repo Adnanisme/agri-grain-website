@@ -1,5 +1,5 @@
 import { Facebook, Instagram, Twitter, MapPin, Phone, Mail } from "lucide-react";
-import logo from "@assets/AFHARS_Agri-Grain_Complete_Logo__1765147662701.png";
+import logo from "@assets/AFHARS_Agri-Grain_Logo__1765148941719.png";
 
 export function Footer() {
   return (

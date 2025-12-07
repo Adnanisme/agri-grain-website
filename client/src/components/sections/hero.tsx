@@ -13,7 +13,7 @@ export function Hero() {
           alt="Nigerian Grain Field"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       {/* Content Content */}
@@ -22,21 +22,21 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-2xl bg-white/95 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-2xl border-l-8 border-secondary"
+          className="max-w-4xl mx-auto text-center"
         >
-          <span className="inline-block py-1 px-3 rounded-full bg-green-100 text-primary text-xs font-bold tracking-wider mb-6 uppercase">
+          <span className="inline-block py-2 px-4 rounded-full bg-secondary text-primary text-sm font-bold tracking-wider mb-8 uppercase shadow-lg">
             Since 2025
           </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground mb-6 leading-tight">
-            Premium Grains & <span className="text-primary">Agricultural Solutions</span> From Nigeria.
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-8 leading-tight drop-shadow-xl">
+            Premium Grains & <span className="text-secondary">Agricultural Solutions</span> From Nigeria.
           </h1>
-          <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed font-medium drop-shadow-md max-w-2xl mx-auto">
             Connecting Nigerian soil to the world. We specialize in sustainable grain production, storage, and supply chain management for a food-secure future.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 text-lg h-14"
+              className="bg-secondary hover:bg-secondary/90 text-primary font-bold rounded-full px-10 text-lg h-16 shadow-lg hover:shadow-xl hover:scale-105 transition-all"
               onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
             >
               Explore Products
@@ -44,10 +44,10 @@ export function Hero() {
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-transparent border-2 border-primary text-primary hover:bg-primary/5 rounded-full px-8 text-lg h-14"
+              className="bg-transparent border-2 border-white text-white hover:bg-white/20 rounded-full px-10 text-lg h-16 backdrop-blur-sm transition-all"
               onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
             >
-              Learn More <ArrowRight className="ml-2 h-5 w-5" />
+              Learn More <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
           </div>
         </motion.div>

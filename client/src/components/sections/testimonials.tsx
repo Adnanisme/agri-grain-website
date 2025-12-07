@@ -1,29 +1,53 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 const testimonials = [
   {
     name: "Alhaji Musa Ibrahim",
     role: "Wholesale Grain Distributor, Kano",
-    content: "AFZHARS has been our most reliable partner for sorghum and maize supply for over 3 years. Their quality is consistent, and delivery is always on time.",
+    content: "AFZHARS has been our most reliable partner for sorghum and maize supply for over 3 years. Their quality is consistent, and delivery is always on time. They truly understand the market.",
     initials: "MI"
   },
   {
     name: "Dr. Ngozi Adeleke",
     role: "Livestock Farm Manager",
-    content: "The quality of animal feed we source from AFZHARS has significantly improved our livestock health. Their fattening program expertise is unmatched.",
+    content: "The quality of animal feed we source from AFZHARS has significantly improved our livestock health. Their fattening program expertise is unmatched in the industry.",
     initials: "NA"
   },
   {
     name: "Emmanuel Okafor",
     role: "Food Processing CEO",
-    content: "Finding clean, high-quality soya beans in bulk was a challenge until we partnered with AFZHARS. They understand the industrial standards we require.",
+    content: "Finding clean, high-quality soya beans in bulk was a challenge until we partnered with AFZHARS. They understand the industrial standards we require for our production.",
     initials: "EO"
+  },
+  {
+    name: "Hajiya Fatima Bello",
+    role: "Market Association Leader",
+    content: "Their grains are always clean and stone-free. My customers always ask for AFZHARS products specifically because of the premium quality and fair pricing.",
+    initials: "FB"
+  },
+  {
+    name: "John Danjuma",
+    role: "Export Partner",
+    content: "We export sesame seeds to Asia, and AFZHARS has been our main supplier. Their purity levels consistently meet international export standards.",
+    initials: "JD"
+  },
+  {
+    name: "Sarah Oladipo",
+    role: "Restaurant Chain Owner",
+    content: "We buy rice and beans in bulk from AFZHARS. The consistency in taste and texture is exactly what our customers love. Highly recommended!",
+    initials: "SO"
   }
 ];
 
 export function Testimonials() {
+  const [emblaRef] = useEmblaCarousel({ loop: true, align: "start" }, [
+    Autoplay({ delay: 4000, stopOnInteraction: false }),
+  ]);
+
   return (
     <section className="py-20 bg-primary relative overflow-hidden">
       {/* Background Pattern */}
@@ -46,40 +70,44 @@ export function Testimonials() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl"
-            >
-              <Quote className="text-secondary h-8 w-8 mb-6 opacity-50" />
-              <p className="text-white/90 text-lg mb-8 italic leading-relaxed">
-                "{testimonial.content}"
-              </p>
-              <div className="flex items-center gap-4">
-                <Avatar className="h-12 w-12 border-2 border-secondary">
-                  <AvatarFallback className="bg-white text-primary font-bold">
-                    {testimonial.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h4 className="font-bold text-white">{testimonial.name}</h4>
-                  <p className="text-white/60 text-sm">{testimonial.role}</p>
-                </div>
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex -ml-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] pl-8 min-w-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl h-full flex flex-col"
+                >
+                  <Quote className="text-secondary h-8 w-8 mb-6 opacity-50 flex-shrink-0" />
+                  <p className="text-white/90 text-lg mb-8 italic leading-relaxed flex-grow">
+                    "{testimonial.content}"
+                  </p>
+                  <div className="flex items-center gap-4 mt-auto">
+                    <Avatar className="h-12 w-12 border-2 border-secondary">
+                      <AvatarFallback className="bg-white text-primary font-bold">
+                        {testimonial.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h4 className="font-bold text-white">{testimonial.name}</h4>
+                      <p className="text-white/60 text-sm">{testimonial.role}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 mt-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} className="h-4 w-4 fill-secondary text-secondary" />
+                    ))}
+                  </div>
+                </motion.div>
               </div>
-              <div className="flex gap-1 mt-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-4 w-4 fill-secondary text-secondary" />
-                ))}
-              </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+

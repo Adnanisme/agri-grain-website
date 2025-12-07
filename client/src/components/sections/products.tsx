@@ -2,12 +2,15 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
-// Import product images
-import maizeImg from "@assets/stock_images/dry_maize_corn_grain_6b8838c6.jpg";
-import sorghumImg from "@assets/stock_images/sorghum_grains_pile__7370144f.jpg";
-import milletImg from "@assets/stock_images/pearl_millet_grains__0765bfb3.jpg";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+
+// Import product images (updated)
+import maizeImg from "@assets/stock_images/white_maize_corn_gra_b609867d.jpg";
+import sorghumImg from "@assets/stock_images/red_sorghum_grains_p_cd26aa06.jpg";
+import milletImg from "@assets/stock_images/pearl_millet_grains__de458967.jpg";
 import riceImg from "@assets/stock_images/raw_white_rice_grain_f8c8b950.jpg";
-import beansImg from "@assets/stock_images/brown_beans_pile_agr_eed00a7f.jpg";
+import beansImg from "@assets/stock_images/nigerian_brown_beans_9a5c8231.jpg";
 import soyaImg from "@assets/stock_images/soya_beans_pile_agri_247d9184.jpg";
 
 const products = [
@@ -69,9 +72,11 @@ export function Products() {
               Sourced directly from fertile Nigerian soils, our grains represent the best of West African agriculture.
             </p>
           </div>
-          <button className="text-primary font-semibold hover:text-secondary transition-colors underline decoration-2 underline-offset-4">
-            View Full Catalog
-          </button>
+          <Link href="/catalog">
+            <Button variant="link" className="text-primary font-semibold hover:text-secondary transition-colors underline decoration-2 underline-offset-4 text-lg p-0">
+              View Full Catalog
+            </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

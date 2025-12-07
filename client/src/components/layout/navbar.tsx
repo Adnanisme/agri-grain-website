@@ -4,7 +4,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
-import logo from "@assets/AFHARS_Agri-Grain_Complete_Logo__1765147662701.png";
+import logo from "@assets/AFHARS_Agri-Grain_Logo__1765148941719.png";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

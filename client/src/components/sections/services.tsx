@@ -1,43 +1,42 @@
 import { motion } from "framer-motion";
-import { Sprout, Globe, Warehouse, Truck, Beef, Wheat, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Sprout, Globe, Warehouse, Truck, Package, Wheat } from "lucide-react";
 
 const services = [
   {
     icon: Sprout,
     title: "Grain Production",
-    description: "Cultivating high-yield, disease-resistant crops using modern sustainable farming techniques.",
+    description: "High-yield, disease-resistant crops grown with sustainable practices. We partner with farmers, supply quality seeds, and share best practices to keep yields strong and soils healthy.",
     color: "bg-green-100 text-green-700"
   },
   {
     icon: Globe,
     title: "Import & Export",
-    description: "Bridging global markets with premium Nigerian produce, ensuring international standards.",
+    description: "Bridging markets with premium Nigerian grains that meet global standards. We manage documentation, customs, certifications, and logistics for smooth cross-border trade.",
     color: "bg-blue-100 text-blue-700"
   },
   {
     icon: Warehouse,
     title: "Grain Storage",
-    description: "State-of-the-art silo facilities preserving grain quality and reducing post-harvest losses.",
+    description: "Modern silos and warehouses that keep grains fresh and pest-free. Climate control protects quality and cuts post-harvest losses.",
     color: "bg-orange-100 text-orange-700"
   },
   {
     icon: Truck,
     title: "Supply Chain",
-    description: "Efficient logistics network connecting farms to markets, ensuring timely delivery.",
+    description: "Reliable logistics from farm gate to destination. We coordinate transport, warehousing, and distribution to deliver on time across Nigeria and beyond.",
     color: "bg-yellow-100 text-yellow-700"
   },
   {
-    icon: Wheat,
-    title: "Feed Production",
-    description: "Nutrient-rich feed formulations derived from quality grains for livestock growth.",
-    color: "bg-amber-100 text-amber-700"
+    icon: Package,
+    title: "Farm Supply & Inputs Distribution",
+    description: "Comprehensive supply of agricultural inputs including seeds, fertilizers, pesticides, and farming equipment. We ensure quality inputs reach farmers efficiently.",
+    color: "bg-purple-100 text-purple-700"
   },
   {
-    icon: Beef,
-    title: "Animal Fattening",
-    description: "Specialized livestock programs focusing on health and weight gain for premium meat.",
-    color: "bg-red-100 text-red-700"
+    icon: Wheat,
+    title: "Quality & Procurement",
+    description: "Trusted sourcing, inspections, and certifications to keep your supply chain compliant and on spec.",
+    color: "bg-amber-100 text-amber-700"
   }
 ];
 
@@ -55,8 +54,8 @@ export function Services() {
       />
       
       {/* Abstract Shapes */}
-      <div className="absolute top-20 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -translate-x-1/4" />
+      <div className="absolute bottom-20 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl translate-x-1/4 max-w-[50vw]" />
 
       <div className="container px-4 md:px-6 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
@@ -65,14 +64,9 @@ export function Services() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-primary">
               Comprehensive<br/>Agricultural Solutions
             </h2>
-          </div>
-          <div className="text-right">
-             <p className="text-muted-foreground max-w-sm mb-4">
-               From soil to silo, we manage every aspect of the agricultural value chain with professionalism.
-             </p>
-             <Button className="rounded-full bg-primary hover:bg-primary/90">
-               Explore All Services
-             </Button>
+            <p className="text-muted-foreground mt-4 text-lg">
+              From soil to silo, we manage every aspect of the agricultural value chain with professionalism.
+            </p>
           </div>
         </div>
 
@@ -98,14 +92,9 @@ export function Services() {
                   {service.title}
                 </h3>
                 
-                <p className="text-muted-foreground leading-relaxed mb-8 group-hover:text-white/80 transition-colors duration-500">
+                <p className="text-muted-foreground leading-relaxed group-hover:text-white/80 transition-colors duration-500">
                   {service.description}
                 </p>
-
-                <div className="flex items-center gap-2 text-sm font-bold text-primary group-hover:text-secondary transition-colors duration-500">
-                  <span>Learn More</span>
-                  <ArrowUpRight className="h-4 w-4" />
-                </div>
               </div>
             </motion.div>
           ))}

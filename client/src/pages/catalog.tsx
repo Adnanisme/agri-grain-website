@@ -1,38 +1,41 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Filter } from "lucide-react";
-import { Link } from "wouter";
+import { ArrowLeft, Search, Mail } from "lucide-react";
+import { Link, useLocation } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { useEffect } from "react";
+import { createProductListSchema, breadcrumbSchema } from "@/lib/structuredData";
 
-// Existing Images
-import maizeImg from "@assets/stock_images/white_maize_corn_gra_b609867d.jpg";
-import sorghumImg from "@assets/stock_images/red_sorghum_grains_p_cd26aa06.jpg";
-import milletImg from "@assets/stock_images/pearl_millet_grains__de458967.jpg";
-import riceImg from "@assets/stock_images/raw_white_rice_grain_f8c8b950.jpg";
-import beansImg from "@assets/stock_images/nigerian_brown_beans_9a5c8231.jpg";
-import soyaImg from "@assets/stock_images/soya_beans_pile_agri_247d9184.jpg";
-import fonioImg from "@assets/stock_images/fonio_grains_acha_pi_5bf222d4.jpg";
-import bambaraImg from "@assets/stock_images/bambara_groundnut_nu_52a5afca.jpg";
-import groundnutImg from "@assets/stock_images/shelled_groundnuts_p_b7953ac2.jpg";
-import sesameImg from "@assets/stock_images/sesame_seeds_pile_be_e8f41e48.jpg";
-import cashewImg from "@assets/stock_images/raw_cashew_nuts_in_s_e9e84fcd.jpg";
-import hibiscusImg from "@assets/stock_images/dried_hibiscus_flowe_80238da8.jpg";
+// Updated Images - Using WebP format for optimal performance
+import maizeImg from "@assets/stock_images/maize.webp";
+import sorghumImg from "@assets/stock_images/Red-Sorghum.webp";
+import milletImg from "@assets/stock_images/millet-grains.webp";
+import riceImg from "@assets/stock_images/rice.webp";
+import beansImg from "@assets/stock_images/beans.webp";
+import soyaImg from "@assets/stock_images/soybeans.webp";
+import fonioImg from "@assets/stock_images/fonio.webp";
+import bambaraImg from "@assets/stock_images/bambara-nut.webp";
+import groundnutImg from "@assets/stock_images/groundnut.webp";
+import sesameImg from "@assets/stock_images/sesame.webp";
 
-// New Images (Updated with downloaded files)
-import wheatImg from "@assets/stock_images/wheat_grains_pile_ni_5e7d14a2.jpg";
-import sunflowerImg from "@assets/stock_images/raw_sunflower_seeds__22b2ead3.jpg";
-import cottonseedImg from "@assets/stock_images/cottonseed_cake_anim_1ceb87fb.jpg";
-import maizeBranImg from "@assets/stock_images/maize_bran_animal_fe_f46f9021.jpg";
-import wheatBranImg from "@assets/stock_images/wheat_bran_animal_fe_8848cc43.jpg";
-import soybeanMealImg from "@assets/stock_images/soybean_meal_soya_ca_a26a8ff6.jpg";
-import groundnutCakeImg from "@assets/stock_images/groundnut_cake_kuli__4fadcc5e.jpg";
-import ofadaImg from "@assets/stock_images/ofada_rice_raw_grain_67d5cbdd.jpg";
-import tigernutImg from "@assets/stock_images/dried_tiger_nuts_pil_2a659973.jpg";
+// Feed & Industrial Images
+import wheatImg from "@assets/stock_images/wheat.webp";
+import sunflowerImg from "@assets/stock_images/sunflower.webp";
+import cottonseedImg from "@assets/stock_images/cottonseed-cake.webp";
+import maizeBranImg from "@assets/stock_images/Corn-bran.webp";
+import wheatBranImg from "@assets/stock_images/wheat-bran.webp";
+import soybeanMealImg from "@assets/stock_images/soybean-cake.webp";
+import groundnutCakeImg from "@assets/stock_images/groundnut_cake.webp";
+import ofadaImg from "@assets/stock_images/ofada.webp";
+import tigernutImg from "@assets/stock_images/tigernuts.webp";
+import cowpeasImg from "@assets/stock_images/cowpeas.webp";
+
 
 const categories = [
   "Cereal Grains",
@@ -122,7 +125,7 @@ const allGrains = [
     id: 10,
     name: "Cowpeas",
     description: "Staple West African pulse. Excellent for home meals, packaging, and commercial food production.",
-    image: beansImg, // Reusing beans img as fallback or specific cowpea img if distinct
+    image: cowpeasImg,
     category: "Legumes & Pulses",
     specs: "Dried | Cleaned"
   },
@@ -217,6 +220,71 @@ const allGrains = [
 export default function Catalog() {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [searchQuery, setSearchQuery] = useState("");
+  const [, setLocation] = useLocation();
+
+  const handleInquiry = () => {
+    // Navigate to home page contact section
+    setLocation("/#contact");
+    // Small delay to ensure navigation completes, then scroll
+    setTimeout(() => {
+      const contactSection = document.querySelector('#contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  useEffect(() => {
+    // Ensure page starts at the top when navigating to the catalog
+    window.scrollTo({ top: 0, behavior: "auto" });
+
+    // Add product schema for all catalog products
+    const productSchemaData = createProductListSchema(
+      allGrains.map(grain => ({
+        name: grain.name,
+        description: grain.description,
+        image: typeof window !== "undefined"
+          ? `${window.location.origin}${grain.image}`
+          : `https://afzharsagrigrains.com${grain.image}`,
+        category: grain.category
+      }))
+    );
+
+    const productScript = document.createElement("script");
+    productScript.type = "application/ld+json";
+    productScript.id = "catalog-products-schema";
+    productScript.textContent = JSON.stringify(productSchemaData);
+    document.head.appendChild(productScript);
+
+    // Add breadcrumb schema
+    const breadcrumbData = breadcrumbSchema([
+      {
+        name: "Home",
+        url: typeof window !== "undefined" ? window.location.origin : "https://afzharsagrigrains.com"
+      },
+      {
+        name: "Grain Catalog",
+        url: typeof window !== "undefined" ? window.location.href : "https://afzharsagrigrains.com/catalog"
+      }
+    ]);
+
+    const breadcrumbScript = document.createElement("script");
+    breadcrumbScript.type = "application/ld+json";
+    breadcrumbScript.id = "catalog-breadcrumb-schema";
+    breadcrumbScript.textContent = JSON.stringify(breadcrumbData);
+    document.head.appendChild(breadcrumbScript);
+
+    return () => {
+      const existingProductScript = document.getElementById("catalog-products-schema");
+      if (existingProductScript) {
+        document.head.removeChild(existingProductScript);
+      }
+      const existingBreadcrumbScript = document.getElementById("catalog-breadcrumb-schema");
+      if (existingBreadcrumbScript) {
+        document.head.removeChild(existingBreadcrumbScript);
+      }
+    };
+  }, []);
 
   const filteredGrains = useMemo(() => {
     return allGrains.filter((item) => {
@@ -228,12 +296,18 @@ export default function Catalog() {
   }, [activeCategory, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-background font-sans text-foreground selection:bg-secondary/30">
-      <Navbar />
+    <>
+      <SEOHead
+        title="Grain Catalog | Maize, Rice, Sorghum, Wheat | AFZHARS AgriGrains"
+        description="Browse 20+ premium Nigerian grains: maize, rice, sorghum, millet, wheat, beans, soya & specialty grains. Quality assured from Kano & Borno. Shop our full catalog now!"
+        url={typeof window !== "undefined" ? window.location.href : ""}
+      />
+      <div className="min-h-screen bg-background font-sans text-foreground selection:bg-secondary/30 overflow-x-hidden w-full max-w-full">
+        <Navbar />
       
       {/* Modern Catalog Header */}
       <section className="relative pt-32 pb-20 px-4 md:px-6 bg-primary overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
            {/* Abstract pattern */}
            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
              <path d="M0 0 L100 0 L100 80 Q50 100 0 80 Z" fill="white" />
@@ -282,10 +356,10 @@ export default function Catalog() {
         </div>
       </section>
 
-      <main className="py-20 -mt-10 relative z-20">
-        <div className="container px-4 md:px-6">
+      <main className="py-20 -mt-10 relative z-20 w-full max-w-full overflow-x-hidden">
+        <div className="container px-4 md:px-6 mx-auto max-w-full">
           {/* Categories / Filters - Horizontal Scroll on Mobile */}
-          <div className="flex gap-3 overflow-x-auto pb-8 mb-4 no-scrollbar justify-start lg:justify-center px-1 snap-x snap-mandatory">
+          <div className="flex gap-3 overflow-x-auto pb-8 mb-4 no-scrollbar justify-start lg:justify-center px-1 snap-x snap-mandatory scroll-smooth">
             <Button 
                 onClick={() => setActiveCategory("All Products")}
                 variant={activeCategory === "All Products" ? "default" : "outline"} 
@@ -321,8 +395,9 @@ export default function Catalog() {
                     <div className="relative aspect-square overflow-hidden bg-muted">
                       <img
                         src={item.image}
-                        alt={item.name}
+                        alt={`Premium ${item.name} - ${item.category} from AFZHARS AgriGrains Ltd., Nigeria`}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                       
@@ -334,28 +409,35 @@ export default function Catalog() {
                     </div>
                     
                     <CardContent className="p-6 flex flex-col flex-grow relative">
-                      <h3 className="text-xl md:text-2xl font-serif font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                        {item.name}
-                      </h3>
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-xl md:text-2xl font-serif font-bold text-foreground group-hover:text-primary transition-colors flex-1 pr-3">
+                          {item.name}
+                        </h3>
+
+                        {/* Inquiry Button - Next to Heading */}
+                        <button
+                          onClick={handleInquiry}
+                          className="w-9 h-9 rounded-full bg-secondary hover:bg-secondary/90 text-white flex items-center justify-center shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 group/btn flex-shrink-0"
+                          aria-label="Contact us about this product"
+                        >
+                          <Mail className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+                        </button>
+                      </div>
+
                       <div className="w-12 h-1 bg-secondary rounded-full mb-4 group-hover:w-20 transition-all duration-300" />
-                      
+
                       <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
                         {item.description}
                       </p>
-                      
+
                       <div className="bg-muted/30 -mx-6 -mb-6 p-4 px-6 border-t border-border/50 group-hover:bg-primary/5 transition-colors mt-auto">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                              Specifications
-                            </p>
-                            <p className="text-xs md:text-sm font-bold text-foreground mt-0.5">
-                              {item.specs}
-                            </p>
-                          </div>
-                          <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:bg-secondary group-hover:text-primary transition-colors">
-                             <ArrowLeft className="rotate-180 h-4 w-4" />
-                          </div>
+                        <div className="text-center">
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                            Specifications
+                          </p>
+                          <p className="text-xs md:text-sm font-bold text-foreground mt-0.5">
+                            {item.specs}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -383,5 +465,6 @@ export default function Catalog() {
 
       <Footer />
     </div>
+    </>
   );
 }

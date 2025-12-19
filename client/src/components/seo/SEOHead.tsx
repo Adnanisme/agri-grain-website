@@ -13,7 +13,7 @@ interface SEOHeadProps {
 export function SEOHead({
   title = "AFZHARS AgriGrains | Premium Nigerian Grains Supplier | Kano & Borno",
   description = "Leading Nigerian agricultural company supplying premium grains: maize, rice, sorghum, beans & more. Trusted quality from Kano & Borno. Contact us for quotes today!",
-  image = "/assets/livestock-aqua-hero.jpg",
+  image = "/opengraph.jpg",
   url = typeof window !== "undefined" ? window.location.href : "",
   type = "website",
   keywords = "Nigerian grains, grain supplier, maize supplier Nigeria, rice supplier Kano, sorghum exporter, grain storage Nigeria, agricultural products, AFZHARS",

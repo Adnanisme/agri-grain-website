@@ -1,6 +1,10 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile, copyFile } from "fs/promises";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -36,6 +40,15 @@ async function buildAll() {
   await rm("dist", { recursive: true, force: true });
 
   console.log("building client...");
+  
+  // Convert favicon.png to favicon.ico before building
+  try {
+    console.log("converting favicon.png to favicon.ico...");
+    await execAsync("node script/convert-favicon-to-ico.js");
+  } catch (err) {
+    console.warn("⚠️  Could not convert favicon (non-fatal):", err);
+  }
+  
   await viteBuild();
 
   // Ensure GitHub Pages SPA routing works:
